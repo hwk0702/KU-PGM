@@ -1,0 +1,37 @@
+# config.yaml
+
+geo_path: /tf/dsba/lecture/2021_1/PGM/project/data/london_boroughs.json
+station_path: /tf/dsba/lecture/2021_1/PGM/project/data/london_stations_addGeo.pkl
+pathOut: /tf/dsba/lecture/2021_1/PGM/project/result/map
+
+colors:
+  - '#5882FA'
+  - '#FE2E64'
+  - '#ffe34c'
+  - '#716ddb'
+  - '#003545'
+  - '#5a4441'
+  - '#72938c'
+  - '#ff9999'
+  - '#cc6666'
+  - '#2e79ff'
+  - '#556666'
+  - '#0a1e3e'
+  - '#554444'
+  - '#cc9999'
+  - '#ffdbac'
+  - '#609377'
+  - '#00b3ff'
+  
+station_info:     
+  11:
+    center: 
+      - 51.48
+      - -0.1295
+    zoom: 13
+    
+  25:
+    center:
+      - 51.48
+      - -0.1295
+    zoom: 13
