@@ -10,8 +10,7 @@ community detection 결과를 folium map으로 visualization
 (2) python graph2map.py -C /tf/dsba/lecture/2021_1/PGM/project/result/case4_duration_local_covid/node_per_class -E /tf/dsba/lecture/2021_1/PGM/project/result/case4_duration_local_covid/node_edge_d -M 51.5072 -0.1275 -Z 12 -T 50
 """
 
-import folium
-from folium import plugins
+
 import pandas as pd
 import numpy as np
 import sys
@@ -21,7 +20,11 @@ import os
 from os.path import isfile, join
 import yaml
 import re
-
+try:
+    import folium
+    from folium import plugins
+except ImportError as e:
+    os.system('pip install folium')
 
 def printProgressBar(iteration, total, prefix = 'Progress', suffix = 'Complete',\
                       decimals = 1, length = 70, fill = '█'):
