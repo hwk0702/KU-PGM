@@ -102,19 +102,20 @@ def cd_visualization(geo,
             else:
                 pass
         else:
-            pass
-    
+            pass 
     
     for i, c in enumerate(node_class.keys()):
         printProgressBar(i+1, len(node_class.keys()))
         for s in node_class[c]:
+            lat = stations[stations['station_id']==s]['latitude'].item()
+            lon = stations[stations['station_id']==s]['longitude'].item()
+            mag = 18
             folium.CircleMarker(
-                [stations[stations['station_id']==s]['latitude'].item(),
-                stations[stations['station_id']==s]['longitude'].item()],
+                [lat, lon],
                 radius = 1,
                 color=colors[i],
                 fill_color=colors[i],
-                popup = f'ID : {s}'
+                popup = f'ID : {s}, <a href="https://google.co.kr/maps/@{lat},{lon},{mag}z""target="_blank"> [Go!] </a>'
             ).add_to(map_osm)
             
     map_osm.save(output_path)
@@ -130,6 +131,7 @@ if __name__ == "__main__":
     pathOut = config['pathOut']
     colors = config['colors']
     station_info = config['station_info']
+    google = config['url_csv']
     
     ap = argparse.ArgumentParser()
     ap.add_argument("-C", "--class_files_path", required=True, help="node_class path")
@@ -166,6 +168,7 @@ if __name__ == "__main__":
     for i in range(len(class_files)):
         class_file = load_data(join(class_files_path, class_files[i]))
         edges_file = load_data(join(edge_files_path, edges_files[i]))
+        
         output_path = join(pathOut, re.search(r"(\w+)\.(\w+)", class_files[i]).group(1))+'.html'
                 
         cd_visualization(geo, stations, class_file, edges_file, output_path, colors, map_center, zoom, threshold)
