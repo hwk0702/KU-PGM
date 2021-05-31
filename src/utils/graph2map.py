@@ -5,9 +5,9 @@ Autor: HyeongwonKang
 community detection 결과를 folium map으로 visualization
 예시 : 
 
-(1) python graph2map.py -C /tf/dsba/lecture/2021_1/PGM/project/result/case4_duration_local_covid/node_per_class -E /tf/dsba/lecture/2021_1/PGM/project/result/case4_duration_local_covid/node_edge_d
+(1) python graph2map.py -C /tf/dsba/lecture/2021_1/PGM/project/result/case4_duration_local_covid/node_per_class -E /tf/dsba/lecture/2021_1/PGM/project/result/case4_duration_local_covid/node_edge_df
 
-(2) python graph2map.py -C /tf/dsba/lecture/2021_1/PGM/project/result/case4_duration_local_covid/node_per_class -E /tf/dsba/lecture/2021_1/PGM/project/result/case4_duration_local_covid/node_edge_d -M 51.5072 -0.1275 -Z 12 -T 50
+(2) python graph2map.py -C /tf/dsba/lecture/2021_1/PGM/project/result/case4_duration_local_covid/node_per_class -E /tf/dsba/lecture/2021_1/PGM/project/result/case4_duration_local_covid/node_edge_df -M 51.5072 -0.1275 -Z 13 -T 50
 """
 
 
@@ -114,6 +114,7 @@ def cd_visualization(geo,
                 radius = 1,
                 color=colors[i],
                 fill_color=colors[i],
+                popup = f'ID : {s}'
             ).add_to(map_osm)
             
     map_osm.save(output_path)
