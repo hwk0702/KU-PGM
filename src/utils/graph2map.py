@@ -20,6 +20,7 @@ import os
 from os.path import isfile, join
 import yaml
 import re
+from itertools import combinations
 try:
     import folium
     from folium import plugins
@@ -87,18 +88,25 @@ def cd_visualization(geo,
         name='london_municipalities',
         style_function = lambda x: {'fill': False}
         ).add_to(map_osm)
-
+    
+    map_group = {}
+    
+    map_group['whole'] = folium.FeatureGroup(name='whole').add_to(map_osm)
+    
+    for i, c in enumerate(node_class.keys()):
+        map_group[f'class_{c}'] = folium.FeatureGroup(name=f'class_{c}').add_to(map_osm)
+    
     for i, c in enumerate(node_edge.index):
         printProgressBar(i+1, len(node_edge.index))
         if node_edge.loc[c, 'source'] != node_edge.loc[c, 'target']:
             if node_edge.loc[c, 'value'] >= threshold:
                 source = [stations[stations['station_id']==node_edge.loc[c, 'source']]['latitude'].item(),
                     stations[stations['station_id']==node_edge.loc[c, 'source']]['longitude'].item()]
-                target = sourge = [stations[stations['station_id']==node_edge.loc[c, 'target']]['latitude'].item(),
+                target = [stations[stations['station_id']==node_edge.loc[c, 'target']]['latitude'].item(),
                     stations[stations['station_id']==node_edge.loc[c, 'target']]['longitude'].item()]
                 points = [source, target]
                 folium.PolyLine(points, color="black", 
-                                weight=node_edge.loc[c, 'value']*0.01, opacity=0.5).add_to(map_osm)
+                                weight=node_edge.loc[c, 'value']*0.01, opacity=0.5).add_to(map_group['whole'])
             else:
                 pass
         else:
@@ -116,8 +124,30 @@ def cd_visualization(geo,
                 color=colors[i],
                 fill_color=colors[i],
                 popup = f'ID : {s}, <a href="https://google.co.kr/maps/@{lat},{lon},{mag}z""target="_blank"> [Go!] </a>'
-            ).add_to(map_osm)
+            ).add_to(map_group[f'class_{c}'])
+            folium.CircleMarker(
+                [lat, lon],
+                radius = 10,
+                color=colors[i],
+                fill_color=colors[i],
+                popup = f'ID : {s}, <a href="https://google.co.kr/maps/@{lat},{lon},{mag}z""target="_blank"> [Go!] </a>'
+            ).add_to(map_group['whole'])
             
+        for s in list(combinations(node_class[c], 2)):
+            if node_edge.query(f'(source=={s[0]}) & (target=={s[1]})')['value'].item() >= threshold:
+                source = [stations[stations['station_id']==s[0]]['latitude'].item(),
+                    stations[stations['station_id']==s[0]]['longitude'].item()]
+                target = [stations[stations['station_id']==s[1]]['latitude'].item(),
+                    stations[stations['station_id']==s[1]]['longitude'].item()]
+                points = [source, target]
+                folium.PolyLine(points, color="black", 
+                                weight=node_edge.query(f'(source=={s[0]}) & (target=={s[1]})')['value'].item()*0.01,
+                                opacity=0.5).add_to(map_group[f'class_{c}'])
+    
+    for i, c in enumerate(node_class.keys()):
+        map_osm.add_child(map_group[f'class_{c}'])
+    folium.LayerControl().add_to(map_osm)
+    
     map_osm.save(output_path)
     print(f'save complete!')             
 
