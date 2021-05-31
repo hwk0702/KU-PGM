@@ -112,7 +112,7 @@ def cd_visualization(geo,
             mag = 18
             folium.CircleMarker(
                 [lat, lon],
-                radius = 1,
+                radius = 10,
                 color=colors[i],
                 fill_color=colors[i],
                 popup = f'ID : {s}, <a href="https://google.co.kr/maps/@{lat},{lon},{mag}z""target="_blank"> [Go!] </a>'
