@@ -131,7 +131,6 @@ if __name__ == "__main__":
     pathOut = config['pathOut']
     colors = config['colors']
     station_info = config['station_info']
-    google = config['url_csv']
     
     ap = argparse.ArgumentParser()
     ap.add_argument("-C", "--class_files_path", required=True, help="node_class path")
